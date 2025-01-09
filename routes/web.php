@@ -100,6 +100,11 @@ Route::middleware('admin')->group(function () {
     Route::get('/admin/ApproveAdvertisement/{id}',                  [App\Http\Controllers\admin\AdvertisementController::class, 'ApproveAdvertisement']);
     Route::get('/admin/RejectApproveAdvertisement/{id}',                  [App\Http\Controllers\admin\AdvertisementController::class, 'RejectApproveAdvertisement']);
 
+    //Report Controller
+    Route::get('/admin/reports/teacherReport',                                [App\Http\Controllers\admin\ReportController::class, 'teacherReport'])->name('admin.reports.teacher');
+    Route::get('/admin/reports/studentReport',                                [App\Http\Controllers\admin\ReportController::class, 'studentReport'])->name('admin.reports.student');
+    Route::get('/admin/reports/incomeReport',                                 [App\Http\Controllers\admin\ReportController::class, 'incomeReport'])->name('admin.reports.income');
+
     });
 
 

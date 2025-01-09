@@ -110,6 +110,15 @@
 									class="feather icon-box"></i></span><span class="pcoded-mtext">Chat</span></a>
 					</li>
 
+					<li class="nav-item pcoded-hasmenu @if(\Request::is('/admin/reports*')) active pcoded-trigger @endif ">
+					    <a href="#!" class="nav-link has-ripple"><span class="pcoded-micon"><i class="fas fa-chart-bar"></i></span><span class="pcoded-mtext">Reports</span><span class="ripple ripple-animate" style="height: 210px; width: 210px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(70, 128, 255); opacity: 0.4; top: -86.5px; left: -6px;"></span></a>
+					    <ul class="pcoded-submenu">
+						    <li><a href="/admin/reports/teacherReport">Teacher Report</a></li>
+							<li><a href="/admin/reports/studentReport">Student Report</a></li>
+							<li><a href="/admin/reports/incomeReport">Income Report</a></li>
+					    </ul>
+					</li>
+
 					<form id="logout-form" action="/admin/logout" method="POST" style="display: none;">
 										   @csrf
 				   </form>

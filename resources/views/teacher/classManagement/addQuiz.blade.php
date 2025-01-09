@@ -107,4 +107,50 @@
         </div>
     </div>
 </section>
+
+<script>
+    let questionIndex = 1;
+    document.getElementById('add-question-btn').addEventListener('click', function () {
+        const container = document.getElementById('quiz-questions-container');
+
+        const newQuestion = document.createElement('div');
+        newQuestion.classList.add('quiz-question');
+        newQuestion.innerHTML = `
+            <h5>Question ${questionIndex + 1}</h5>
+            <div class="form-group">
+                <label for="question">Question</label>
+                <input type="text" name="questions[${questionIndex}][question]" class="form-control" required placeholder="Enter the quiz question">
+            </div>
+            <div class="form-group">
+                <label for="option1">Option 1</label>
+                <input type="text" name="questions[${questionIndex}][option1]" class="form-control" required placeholder="Enter Option 1">
+            </div>
+            <div class="form-group">
+                <label for="option2">Option 2</label>
+                <input type="text" name="questions[${questionIndex}][option2]" class="form-control" required placeholder="Enter Option 2">
+            </div>
+            <div class="form-group">
+                <label for="option3">Option 3</label>
+                <input type="text" name="questions[${questionIndex}][option3]" class="form-control" required placeholder="Enter Option 3">
+            </div>
+            <div class="form-group">
+                <label for="option4">Option 4</label>
+                <input type="text" name="questions[${questionIndex}][option4]" class="form-control" required placeholder="Enter Option 4">
+            </div>
+            <div class="form-group">
+                <label for="correct_option">Correct Option</label>
+                <select name="questions[${questionIndex}][correct_option]" class="form-control" required>
+                    <option value="" disabled selected>Select the correct option</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                    <option value="4">Option 4</option>
+                </select>
+            </div>
+            <hr>
+        `;
+        container.appendChild(newQuestion);
+        questionIndex++;
+    });
+</script>
 @endsection

@@ -58,10 +58,14 @@
                                     <tr>
                                         <th>Total Teachers Registered</th>
                                         <td>{{ array_sum($chartData['series'][0]['data']->toArray()) }}</td>
-
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Download Button -->
+                        <div class="mt-3">
+                            <button class="btn btn-primary" onclick="downloadTeacherReport()">Download Teacher Report</button>
                         </div>
                     </div>
                 </div>
@@ -71,6 +75,8 @@
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.24/jspdf.plugin.autotable.min.js"></script>
 
 <script>
     var chartData = @json($chartData);
@@ -101,5 +107,35 @@
 
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
+
+    function downloadTeacherReport() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        doc.setFontSize(18);
+        doc.text("Teacher Report", 105, 20, null, null, 'center');
+
+        doc.setLineWidth(0.5);
+        doc.line(10, 25, 200, 25);
+
+        chart.dataURI().then(function (uri) {
+            const chartWidth = document.querySelector("#chart").clientWidth;
+            const chartHeight = document.querySelector("#chart").clientHeight;
+            const scaleFactor = 180 / chartWidth;
+            const imgWidth = 180;
+            const imgHeight = chartHeight * scaleFactor;
+
+            doc.addImage(uri.imgURI, 'PNG', 10, 30, imgWidth, imgHeight);
+
+            const table = document.querySelector('table');
+            doc.autoTable({ 
+                html: table, 
+                startY: imgHeight + 40,
+                margin: { top: 10 }
+            });
+
+            doc.save('teacher_report.pdf');
+        });
+    }
 </script>
 @endsection

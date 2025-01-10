@@ -9,16 +9,18 @@ class RescheduleRequest extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'student_id',
         'class_id',
-        'teacher_name',
+        'student_id',
+        'teacher_id',
         'subject_name',
+        'teacher_name',
         'reschedule_date',
         'reschedule_time',
         'note',
         'status',
         'teacher_reply',
-        'updated_link',
+        'link',
+        'reply_date',
     ];
 
     public function student()
@@ -26,9 +28,13 @@ class RescheduleRequest extends Model
         return $this->belongsTo(Student::class, 'student_id', 'stu_ID');
     }
 
-    // Relationship with Class
     public function class()
     {
         return $this->belongsTo(ClassDetail::class, 'class_id', 'Class_ID');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class, 'teacher_id', 'Teacher_ID');
     }
 }

@@ -137,6 +137,10 @@ Route::middleware('teacher')->group(function () {
 
     Route::get('/teacher/classManagement/addQuiz/{classId}',   [App\Http\Controllers\teacher\ClassController::class, 'showAddQuizForm'])->name('quiz.addForm');
     Route::post('/teacher/classManagement/addQuiz/{classId}',  [App\Http\Controllers\teacher\ClassController::class, 'storeQuiz'])->name('quiz.store');
+    
+    Route::get('/teacher/getResheduleRequests', [App\Http\Controllers\teacher\ClassController::class, 'getResheduleRequests'])->name('teacher.resheduleRequests');
+    Route::post('/teacher/updateRescheduleStatusWithReply', [App\Http\Controllers\teacher\ClassController::class, 'updateRescheduleStatusWithReply'])->name('teacher.updateRescheduleStatusWithReply');
+
 
 
 

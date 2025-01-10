@@ -74,11 +74,11 @@
 					    </ul>
 					</li>
 
-					<li class="nav-item  @if(\Request::is('teacher/feedbackManagement/feedbacks')) active @endif">
-						<a href="/teacher/feedbackManagement/feedbacks" class="nav-link "><span class="pcoded-micon"><i
-									class="feather icon-box"></i></span><span class="pcoded-mtext">Feedbacks</span></a>
+					<li class="nav-item  @if(\Request::is('teacher/getResheduleRequests')) active @endif">
+						<a href="/teacher/getResheduleRequests" class="nav-link "><span class="pcoded-micon"><i
+									class="feather icon-calendar"></i></span><span class="pcoded-mtext">Reschedule Requests</span></a>
 					</li>
-					
+
 				   <form id="logout-form" action="/teacher/logout" method="POST" style="display: none;">
 										   @csrf
 				   </form>

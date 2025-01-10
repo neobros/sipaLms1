@@ -53,7 +53,7 @@
                                 </span>
                             </td>
                             <td>{{ $request->teacher_reply ?? 'N/A' }}</td>
-                            <td>{{ $request->updated_link ?? 'N/A' }}</td>
+                            <td>{{ $request->link ?? 'N/A' }}</td>
                         </tr>
                         @empty
                         <tr>

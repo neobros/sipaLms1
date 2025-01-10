@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Teacher;
 use DB;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -131,28 +132,58 @@ class HomeController extends Controller
 
 
     public function dashboard()
-    { 
-
+    {
+        $teacherId = Auth::guard('teacher')->user()->Teacher_ID;
 
         $classesCount = DB::table('class_detail')
-        ->where('Teacher_ID', Auth::guard('teacher')->user()->Teacher_ID)->count();
-
+            ->where('Teacher_ID', $teacherId)
+            ->count();
 
         $StudentCount = DB::table('reservation')
-        ->where('Teacher_ID', Auth::guard('teacher')->user()->Teacher_ID)->count();
+            ->where('Teacher_ID', $teacherId)
+            ->count();
 
         $allEarnings = DB::table('reservation')
-        ->join('payment', 'reservation.Reservation_ID', '=', 'payment.Reservation_ID')
-        ->where('Teacher_ID', Auth::guard('teacher')->user()->Teacher_ID)->sum('payment.amount');
+            ->join('payment', 'reservation.Reservation_ID', '=', 'payment.Reservation_ID')
+            ->where('Teacher_ID', $teacherId)
+            ->sum('payment.amount');
 
+        $startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $endDate = Carbon::now()->format('Y-m-d');
+
+        $incomeByDate = DB::table('reservation')
+            ->join('payment', 'reservation.Reservation_ID', '=', 'payment.Reservation_ID')
+            ->where('Teacher_ID', $teacherId)
+            ->whereBetween('payment.created_at', [$startDate, $endDate])
+            ->selectRaw('DATE(payment.created_at) as date, SUM(payment.amount) as total_income')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $dateRange = collect();
+        $currentDate = Carbon::parse($startDate);
+
+        while ($currentDate->lte(Carbon::parse($endDate))) {
+            $dateRange->push($currentDate->format('Y-m-d'));
+            $currentDate->addDay();
+        }
+
+        $chartData = [
+            'categories' => $dateRange,
+            'series' => [
+                [
+                    'name' => 'Daily Income',
+                    'data' => $dateRange->map(fn ($date) => $incomeByDate->firstWhere('date', $date)?->total_income ?? 0),
+                ],
+            ],
+        ];
 
         return view('teacher.dashboard')->with([
-
-            'classesCount'  =>  $classesCount, 
-            'StudentCount'  =>  $StudentCount, 
-            'allEarnings'  =>   $allEarnings, 
-
-
+            'classesCount' => $classesCount,
+            'StudentCount' => $StudentCount,
+            'allEarnings' => $allEarnings,
+            'chartData' => $chartData,
         ]);
     }
+
 }

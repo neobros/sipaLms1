@@ -17,59 +17,104 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
-                <div class="col-lg-7 col-md-12">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="card support-bar overflow-hidden">
-                                <div class="card-body pb-0">
-                                    <h2 class="m-0"></h2>
-                                    <span class="text-c-blue">{{$StudentCount}}</span>
-                                    <p class="mb-3 mt-3">Total registered student.</p>
-                                </div>
+            <div class="col-lg-7 col-md-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card support-bar overflow-hidden">
+                            <div class="card-body pb-0">
+                                <h2 class="m-0"></h2>
+                                <span class="text-c-blue">{{$StudentCount}}</span>
+                                <p class="mb-3 mt-3">Total registered students.</p>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="card support-bar overflow-hidden">
-                                <div class="card-body pb-0">
-                                    <h2 class="m-0"></h2>
-                                    <span class="text-c-green">{{$classesCount}}</span>
-                                    <p class="mb-3 mt-3">Total Classes.</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card support-bar overflow-hidden">
+                            <div class="card-body pb-0">
+                                <h2 class="m-0"></h2>
+                                <span class="text-c-green">{{$classesCount}}</span>
+                                <p class="mb-3 mt-3">Total Classes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-12">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-6">
+                                        <h4 class="text-c-yellow">RS {{$allEarnings}}.00</h4>
+                                        <h6 class="text-muted m-b-0">All Earnings</h6>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <i class="feather icon-bar-chart-2 f-28"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-c-yellow">
+                                <div class="row align-items-center"> 
+                                    <div class="col-3 text-right">
+                                        <i class="feather icon-trending-up text-white f-16"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-5 col-md-12">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-6">
-                                            <h4 class="text-c-yellow">RS {{$allEarnings}}.00</h4>
-                                            <h6 class="text-muted m-b-0">All Earnings</h6>
-                                        </div>
-                                        <div class="col-4 text-right">
-                                            <i class="feather icon-bar-chart-2 f-28"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer bg-c-yellow">
-                                    <div class="row align-items-center"> 
-                                        <div class="col-3 text-right">
-                                            <i class="feather icon-trending-up text-white f-16"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                       
+            </div>
+        </div>
+
+        <!-- Income Chart -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Income Report</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="income-chart" class="mt-4"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
 
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<script>
+    var chartData = @json($chartData);
+
+    var options = {
+        series: chartData.series,
+        chart: {
+            type: 'bar',
+            height: 350,
+        },
+        plotOptions: {
+            bar: {
+                columnWidth: '80%',
+            },
+        },
+        xaxis: {
+            categories: chartData.categories, 
+            labels: {
+                rotate: -45,
+            },
+        },
+        yaxis: {
+            title: {
+                text: 'Income (Rs)',
+            },
+        },
+    };
+
+    var incomeChart = new ApexCharts(document.querySelector("#income-chart"), options);
+    incomeChart.render();
+</script>
+@endsection

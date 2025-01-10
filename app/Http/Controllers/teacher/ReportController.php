@@ -46,14 +46,18 @@ class ReportController extends Controller
         return view('teacher.reportsManagement.studentReport', compact('chartData', 'startDate', 'endDate'));
     }
 
-
+    
     public function incomeReport(Request $request)
     {
+        $teacherId = Auth::guard('teacher')->user()->Teacher_ID;
+
         $startDate = $request->input('start_date', Carbon::now()->startOfMonth()->format('Y-m-d'));
         $endDate = $request->input('end_date', Carbon::now()->format('Y-m-d'));
 
-        $incomeByDate = \App\Models\Payment::whereBetween('created_at', [$startDate, $endDate])
-            ->selectRaw('DATE(created_at) as date, SUM(amount) as total_income')
+        $incomeByDate = \App\Models\Payment::join('reservation', 'payment.Reservation_ID', '=', 'reservation.Reservation_ID')
+            ->where('reservation.Teacher_ID', $teacherId) // Filter by the logged-in teacher's ID
+            ->whereBetween('payment.created_at', [$startDate, $endDate]) // Filter by date range
+            ->selectRaw('DATE(payment.created_at) as date, SUM(payment.amount) as total_income')
             ->groupBy('date')
             ->orderBy('date')
             ->get();
@@ -76,6 +80,7 @@ class ReportController extends Controller
             ],
         ];
 
-        return view('admin.reportsManagement.incomeReport', compact('chartData', 'startDate', 'endDate'));
+        return view('teacher.reportsManagement.incomeReport', compact('chartData', 'startDate', 'endDate'));
     }
+
 }

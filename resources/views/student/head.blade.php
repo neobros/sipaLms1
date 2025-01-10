@@ -234,14 +234,20 @@
                     <a href="/team" class="nav-item nav-link">Teachers</a>
 
 
-                    <a href="/contact.html" class="nav-item nav-link">Contact</a>
+                    <a href="/contact" class="nav-item nav-link">Contact</a>
                     @if(!Auth::guard('student')->check())  
                     <a href="/teacher/TobeTeacher" class="nav-item nav-link">To be Teacher</a>
                     @endif
 
-                    <a href="#" class="nav-item nav-link">About</a>
+                    <a href="/about" class="nav-item nav-link">About</a>
 
                     <a href="/selfEvaluation" class="nav-item nav-link">Self-Evaluation</a>
+
+                    @if(Auth::guard('student')->check())  
+                     <a href="/leaderBoard" class="nav-item nav-link">Leader Board</a>
+                    @else
+                    <a href="#" onclick="needLogin()" class="nav-item nav-link">Leader Board</a>
+                    @endif
 
                     @if(Auth::guard('student')->check())  
                      <a href="/myClasses" class="nav-item nav-link">My Classes</a>
@@ -437,17 +443,19 @@
             <div class="col-lg-3 col-md-6 mb-5">
                 <h3 class="text-primary mb-4">Quick Links</h3>
                 <div class="d-flex flex-column justify-content-start">
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>About Us</a>
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Classes</a>
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Teachers</a>
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Blog</a>
-                    <a class="text-white" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
-
-                    <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>To be Teacher</a>
+                    <a class="text-white mb-2" href="/"><i class="fa fa-angle-right mr-2"></i>Home</a>
+                    <a class="text-white mb-2" href="/about"><i class="fa fa-angle-right mr-2"></i>About Us</a>
+                    @if(Auth::guard('student')->check())  
+                       <a class="text-white mb-2" href="/myClasses"><i class="fa fa-angle-right mr-2"></i>Our Classes</a>
+                    @else
+                       <a class="text-white mb-2" href="#" onclick="needLogin()"  ><i class="fa fa-angle-right mr-2"></i>Our Classes</a>
+                    @endif
+                    <a class="text-white mb-2" href="/team"><i class="fa fa-angle-right mr-2"></i>Our Teachers</a>
+                    <a class="text-white" href="/contact"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+               
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 mb-5">
+            <!-- <div class="col-lg-3 col-md-6 mb-5">
                 <h3 class="text-primary mb-4">Newsletter</h3>
                 <form action="">
                     <div class="form-group">
@@ -461,14 +469,14 @@
                         <button class="btn btn-primary btn-block border-0 py-3" type="submit">Submit Now</button>
                     </div>
                 </form>
-            </div>
+            </div> -->
         </div>
         <div class="container-fluid pt-5" style="border-top: 1px solid rgba(23, 162, 184, .2);;">
             <p class="m-0 text-center text-white">
-                &copy; <a class="text-primary font-weight-bold" href="#">Your Site Name</a>. All Rights Reserved. 
+                &copy; <a class="text-primary font-weight-bold" href="#">SIPSA</a>. All Rights Reserved. 
 				
 				<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-				Designed by <a class="text-primary font-weight-bold" href="https://htmlcodex.com">HTML Codex</a>
+				Designed by Kavindi.
             </p>
         </div>
     </div>

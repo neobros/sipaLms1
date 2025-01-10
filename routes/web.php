@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 //---------------------------------------------student--------------------------------------------------------
 
-Route::get('/',                                           [App\Http\Controllers\student\HomeController::class, 'home']);
+Route::get('/',                                           [App\Http\Controllers\student\HomeController::class, 'home'])->name('student.selfEvaluation');
 Route::get('/team',                                       [App\Http\Controllers\student\HomeController::class, 'team']);
 
 
@@ -30,11 +30,14 @@ Route::get('/register', function () {
 });
 
 
+Route::get('/about',                                      [App\Http\Controllers\student\HomeController::class, 'about']);
+Route::get('/contact',                                    [App\Http\Controllers\student\HomeController::class, 'contact']);
+
 Route::post('/login/student',                             [App\Http\Controllers\student\HomeController::class, 'login']);
 Route::post('/logout/student',                            [App\Http\Controllers\student\HomeController::class, 'logout']);
 Route::post('/register',                                  [App\Http\Controllers\student\HomeController::class, 'register']);
 Route::get('/class/{id}',                                 [App\Http\Controllers\student\HomeController::class, 'class']);
-
+Route::get('/leaderBoard',                               [App\Http\Controllers\student\HomeController::class, 'leaderBoard']);
 Route::get('/studentChat/messages',                       [App\Http\Controllers\ChatController::class, 'studentGetMessages']);
 
 Route::get('/teamView/{Teacher_ID}',                  [App\Http\Controllers\student\HomeController::class, 'teamView']);
@@ -46,7 +49,7 @@ Route::middleware('student')->group(function () {
     Route::post('/pay',                                   [App\Http\Controllers\student\HomeController::class, 'pay']);
     Route::get('/myClasses',                              [App\Http\Controllers\student\HomeController::class, 'myClasses']);
     Route::post('/addFeedback',                           [App\Http\Controllers\student\HomeController::class, 'addFeedback']);
-    Route::get('/selfEvaluation',                         [App\Http\Controllers\student\SelfEvaluationController::class, 'selfEvaluation'])->name('student.selfEvaluation');;
+    Route::get('/selfEvaluation',                         [App\Http\Controllers\student\SelfEvaluationController::class, 'selfEvaluation'])->name('student.selfEvaluation');
 
     Route::get('/chat/messages',                          [App\Http\Controllers\ChatController::class, 'getMessages']);
     Route::post('/chat/send',                             [App\Http\Controllers\ChatController::class, 'sendMessage']);

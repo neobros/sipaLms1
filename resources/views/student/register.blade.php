@@ -159,8 +159,15 @@
           <span class="invalid-feedback">{{ $message }}</span>
           @enderror
 
-          <input id="Stu_image" type="file" name="Stu_image" class="form-control @error('Stu_image') is-invalid @enderror">
+          <!-- <input id="Stu_image" type="file" name="Stu_image" class="form-control @error('Stu_image') is-invalid @enderror">
           @error('Stu_image')
+          <span class="invalid-feedback">{{ $message }}</span>
+          @enderror -->
+
+          
+          <input id="parent_email" type="email" placeholder="Parent Email" name="parent_email" value="{{ old('parent_email') }}"
+            class="form-control @error('parent_email') is-invalid @enderror" required>
+          @error('parent_email')
           <span class="invalid-feedback">{{ $message }}</span>
           @enderror
 
@@ -170,7 +177,7 @@
             <canvas id="canvas" class="d-none"></canvas>
             <button type="button" id="capture-btn" class="btn btn-primary mt-2 d-none">Capture Photo</button>
             <img id="captured-photo" class="d-none mt-2">
-            <input type="hidden" name="captured_image" id="captured_image">
+            <input required type="hidden" name="captured_image" id="captured_image">
           </div>
 
           <input id="email" type="email" placeholder="Email Address" name="Stu_email" value="{{ old('Stu_email') }}"

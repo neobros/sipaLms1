@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 //---------------------------------------------student--------------------------------------------------------
 
-Route::get('/',                                           [App\Http\Controllers\student\HomeController::class, 'home'])->name('student.selfEvaluation');
+Route::get('/',                                           [App\Http\Controllers\student\HomeController::class, 'home'])->name('/');
 Route::get('/team',                                       [App\Http\Controllers\student\HomeController::class, 'team']);
 
 

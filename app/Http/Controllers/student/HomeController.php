@@ -123,6 +123,7 @@ class HomeController extends Controller
     {     
         // Validate form data
         $validator = Validator::make($request->all(), [
+            'captured_image' => 'required',
             'username' => 'required|string|max:255',
             'Stu_image.*' => 'image|mimes:jpg,jpeg,png,gif|max:2048',
             'Stu_email' => 'required|string|email|max:255|unique:student',

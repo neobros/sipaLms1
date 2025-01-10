@@ -55,6 +55,9 @@ Route::middleware('student')->group(function () {
     Route::get('/myClasses',                              [App\Http\Controllers\student\HomeController::class, 'myClasses']);
     Route::post('/addFeedback',                           [App\Http\Controllers\student\HomeController::class, 'addFeedback']);
     Route::get('/selfEvaluation',                         [App\Http\Controllers\student\SelfEvaluationController::class, 'selfEvaluation'])->name('student.selfEvaluation');
+    Route::post('/reschedule',                              [App\Http\Controllers\student\HomeController::class, 'rescheduleRequest'])->name('student.rescheduleRequest');
+    Route::get('/rescheduleList',                              [App\Http\Controllers\student\HomeController::class, 'getRescheduleRequests'])->name('student.getRescheduleRequest');
+
 
     Route::get('/chat/messages',                          [App\Http\Controllers\ChatController::class, 'getMessages']);
     Route::post('/chat/send',                             [App\Http\Controllers\ChatController::class, 'sendMessage']);
@@ -134,6 +137,10 @@ Route::middleware('teacher')->group(function () {
 
     Route::get('/teacher/classManagement/addQuiz/{classId}',   [App\Http\Controllers\teacher\ClassController::class, 'showAddQuizForm'])->name('quiz.addForm');
     Route::post('/teacher/classManagement/addQuiz/{classId}',  [App\Http\Controllers\teacher\ClassController::class, 'storeQuiz'])->name('quiz.store');
+    
+    Route::get('/teacher/getResheduleRequests', [App\Http\Controllers\teacher\ClassController::class, 'getResheduleRequests'])->name('teacher.resheduleRequests');
+    Route::post('/teacher/updateRescheduleStatusWithReply', [App\Http\Controllers\teacher\ClassController::class, 'updateRescheduleStatusWithReply'])->name('teacher.updateRescheduleStatusWithReply');
+
 
 
 

@@ -11,6 +11,7 @@ use App\Models\Student;
 use App\Models\Reservation;
 use App\Models\Payment;
 use App\Models\Feedback;
+use App\Models\RescheduleRequest;
 use DB;
 class HomeController extends Controller
 {
@@ -267,25 +268,32 @@ class HomeController extends Controller
     
     public function myClasses()
     {
-
         $myClassData = DB::table('class_detail')
-        ->join('subject', 'class_detail.Class_stream', '=', 'subject.subj_ID')
-        ->join('teacher', 'class_detail.Teacher_ID', '=', 'teacher.Teacher_ID')
-        ->join('reservation', 'class_detail.Class_ID', '=', 'reservation.Class_ID')
-        ->select('class_detail.*', 'subject.subj_stream as subj_stream1' , 'subject.subj_name as subj_name1' , 'teacher.Teach_name as Teach_name1')
-        ->where('reservation.stu_ID' ,Auth::guard('student')->user()->stu_ID)->get();
-
+            ->join('subject', 'class_detail.Class_stream', '=', 'subject.subj_ID')
+            ->join('teacher', 'class_detail.Teacher_ID', '=', 'teacher.Teacher_ID')
+            ->join('reservation', 'class_detail.Class_ID', '=', 'reservation.Class_ID')
+            ->leftJoin('reschedule_requests', function ($join) {
+                $join->on('class_detail.Class_ID', '=', 'reschedule_requests.class_id')
+                    ->where('reschedule_requests.student_id', '=', Auth::guard('student')->user()->stu_ID);
+            })
+            ->select(
+                'class_detail.*',
+                'subject.subj_stream as subj_stream1',
+                'subject.subj_name as subj_name1',
+                'teacher.Teach_name as Teach_name1',
+                'reschedule_requests.id as reschedule_request_id' // Check if there's a reschedule request
+            )
+            ->where('reservation.stu_ID', Auth::guard('student')->user()->stu_ID)
+            ->get();
 
         $SubjectList = DB::table('subject')->select('subj_stream')
-        ->distinct()->get();
-
+            ->distinct()->get();
 
         return view('student.myClasses')->with([
-            'myClassData'  =>  $myClassData, 
-            'SubjectList'  =>  $SubjectList, 
+            'myClassData' => $myClassData,
+            'SubjectList' => $SubjectList,
         ]);
     }
-
 
     public function classView($Class_ID)
     {  
@@ -335,5 +343,59 @@ class HomeController extends Controller
 
         return redirect()->back()->with('success', 'Feedback Added Successfully!');
     }
+
+    public function rescheduleRequest(Request $request)
+    {
+        $request->validate([
+            'class_id' => 'required|exists:class_detail,Class_ID',
+            'reschedule_date' => 'required|date',
+            'reschedule_time' => 'required',
+            'note' => 'required|string|max:500',
+        ]);
+
+        try {
+            $classDetail = DB::table('class_detail')
+                ->where('Class_ID', $request->class_id)
+                ->first();
+
+            if (!$classDetail) {
+                return back()->withErrors(['error' => 'Class not found']);
+            }
+
+            DB::table('reschedule_requests')->insert([
+                'class_id' => $request->class_id,
+                'student_id' => Auth::guard('student')->user()->stu_ID, 
+                'teacher_id' => $classDetail->Teacher_ID, 
+                'subject_name' => $request->subject_name, 
+                'teacher_name' => $request->teacher_name, 
+                'reschedule_date' => $request->reschedule_date,
+                'reschedule_time' => $request->reschedule_time,
+                'note' => $request->note,
+                'status' => 'pending', 
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return redirect()->back()->with('success', 'Reschedule request submitted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
+        }
+    }
+
+    public function getRescheduleRequests()
+    {
+        $studentId = Auth::guard('student')->user()->stu_ID; 
+      
+        $rescheduleRequests = RescheduleRequest::where('student_id', $studentId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            
+        $SubjectList = DB::table('subject')->select('subj_stream')
+            ->distinct()->get();
+
+        return view('student.rescheduleRequests', compact('rescheduleRequests', 'SubjectList'));
+    }
+
 
 }

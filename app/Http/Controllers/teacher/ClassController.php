@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ClassDetails;
 use App\Models\Quiz;
 use App\Models\QuizQuestion;
+use App\Models\RescheduleRequest;
 use DB;
 use Illuminate\Support\Facades\Auth;
 class ClassController extends Controller
@@ -104,7 +105,7 @@ class ClassController extends Controller
             )
             ->where('class_detail.Class_ID', $classId)
             ->first(); 
-// dd($classDetails);
+
         if (!$classDetails) {
             return redirect()->back()->withErrors(['error' => 'Class not found']);
         }
@@ -147,4 +148,57 @@ class ClassController extends Controller
         return redirect()->route('quiz.addForm', $classId)->with('success', 'Quiz and questions added successfully.');
     }
 
+    public function getResheduleRequests()
+    {
+        try {
+            $teacherId = Auth::guard('teacher')->user()->Teacher_ID; 
+            $rescheduleRequests = DB::table('reschedule_requests')
+                ->join('class_detail', 'reschedule_requests.class_id', '=', 'class_detail.Class_ID')
+                ->join('student', 'reschedule_requests.student_id', '=', 'student.stu_ID')
+                ->select(
+                    'reschedule_requests.*',
+                    'class_detail.Class_date as original_date',
+                    'class_detail.Class_time as original_time',
+                    'student.stu_name as student_name',
+                    'student.parent_email as parent_email'
+                )
+                ->where('reschedule_requests.teacher_id', $teacherId)
+                ->orderBy('reschedule_requests.created_at', 'desc')
+                ->get();
+
+            return view('teacher.classManagement.rescheduleRequests', compact('rescheduleRequests'));
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
+        }
+    }
+
+    public function updateRescheduleStatusWithReply(Request $request)
+    {
+        $request->validate([
+            'request_id' => 'required|exists:reschedule_requests,id',
+            'status' => 'required|in:approved,rejected',
+            'teacher_reply' => 'nullable|string|max:1000',
+            'link' => 'nullable',
+        ]);
+    
+        try {
+            $rescheduleRequest = RescheduleRequest::findOrFail($request->request_id);
+    
+            $teacherReply = $request->status === 'rejected' && empty($request->teacher_reply)
+                ? 'The reschedule request has been rejected due to unsuitable timing.'
+                : $request->teacher_reply;
+
+            $rescheduleRequest->update([
+                'status' => $request->status,
+                'teacher_reply' => $teacherReply,
+                'link' => $request->status === 'approved' ? $request->link : null, 
+                'reply_date' => now(),
+            ]);
+    
+            return redirect()->back()->with('success', 'Reschedule request updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
+        }
+    }
+    
 }

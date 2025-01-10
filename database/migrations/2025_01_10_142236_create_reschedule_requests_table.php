@@ -16,7 +16,10 @@ class CreateRescheduleRequestsTable extends Migration
         Schema::create('reschedule_requests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('class_id');
+            $table->unsignedBigInteger('student_id');
             $table->unsignedBigInteger('teacher_id'); 
+            $table->string('subject_name'); 
+            $table->string('teacher_name');
             $table->date('reschedule_date');
             $table->time('reschedule_time');
             $table->text('note'); 

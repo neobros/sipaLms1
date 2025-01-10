@@ -57,7 +57,6 @@
 									class="feather icon-box"></i></span><span class="pcoded-mtext">Feedbacks</span></a>
 					</li>
 
-
 					<li class="nav-item pcoded-hasmenu @if(\Request::is('/teacher/advertisementManagement*')) active pcoded-trigger @endif ">
 					    <a href="#!" class="nav-link has-ripple"><span class="pcoded-micon"><i class="feather icon-layout"></i></span><span class="pcoded-mtext">Advertisement</span><span class="ripple ripple-animate" style="height: 210px; width: 210px; animation-duration: 0.7s; animation-timing-function: linear; background: rgb(70, 128, 255); opacity: 0.4; top: -86.5px; left: -6px;"></span></a>
 					    <ul class="pcoded-submenu">
@@ -75,6 +74,11 @@
 					    </ul>
 					</li>
 
+					<li class="nav-item  @if(\Request::is('teacher/feedbackManagement/feedbacks')) active @endif">
+						<a href="/teacher/feedbackManagement/feedbacks" class="nav-link "><span class="pcoded-micon"><i
+									class="feather icon-box"></i></span><span class="pcoded-mtext">Feedbacks</span></a>
+					</li>
+					
 				   <form id="logout-form" action="/teacher/logout" method="POST" style="display: none;">
 										   @csrf
 				   </form>

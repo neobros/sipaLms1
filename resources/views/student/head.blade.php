@@ -256,7 +256,7 @@
                     @endif
 
                     @if(Auth::guard('student')->check())  
-                     <a href="/rescheduleRequests" class="nav-item nav-link">Reschedule Requests</a>
+                     <a href="/rescheduleList" class="nav-item nav-link">Reschedule Requests</a>
                     @else
                     <a href="#" onclick="needLogin()" class="nav-item nav-link">Reschedule Requests</a>
                     @endif

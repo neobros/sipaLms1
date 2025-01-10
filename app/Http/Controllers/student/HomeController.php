@@ -11,6 +11,7 @@ use App\Models\Student;
 use App\Models\Reservation;
 use App\Models\Payment;
 use App\Models\Feedback;
+use App\Models\RescheduleRequest;
 use DB;
 class HomeController extends Controller
 {
@@ -356,7 +357,10 @@ class HomeController extends Controller
 
             DB::table('reschedule_requests')->insert([
                 'class_id' => $request->class_id,
+                'student_id' => Auth::guard('student')->user()->stu_ID, 
                 'teacher_id' => $classDetail->Teacher_ID, 
+                'subject_name' => $request->subject_name, 
+                'teacher_name' => $request->teacher_name, 
                 'reschedule_date' => $request->reschedule_date,
                 'reschedule_time' => $request->reschedule_time,
                 'note' => $request->note,
@@ -370,5 +374,21 @@ class HomeController extends Controller
             return redirect()->back()->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
         }
     }
+
+    public function getRescheduleRequests()
+    {
+        $studentId = Auth::guard('student')->user()->stu_ID; 
+      
+        $rescheduleRequests = RescheduleRequest::where('student_id', $studentId)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            
+        $SubjectList = DB::table('subject')->select('subj_stream')
+            ->distinct()->get();
+
+        return view('student.rescheduleRequests', compact('rescheduleRequests', 'SubjectList'));
+    }
+
 
 }

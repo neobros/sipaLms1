@@ -55,6 +55,57 @@ class HomeController extends Controller
         ]);
     }
 
+    public function about()
+    {
+        $TeacherList = DB::table('teacher')
+        ->join('subject', 'teacher.Teach_stream', '=', 'subject.subj_ID')->where('Status' ,1)->get();
+
+
+        $SubjectList = DB::table('subject')->select('subj_stream')
+        ->distinct()->get();
+
+
+        return view('student.about')->with([
+            'TeacherList'  =>  $TeacherList, 
+            'SubjectList'  =>  $SubjectList, 
+        ]);
+    }
+
+    public function contact()
+    {
+        $TeacherList = DB::table('teacher')
+        ->join('subject', 'teacher.Teach_stream', '=', 'subject.subj_ID')->where('Status' ,1)->get();
+
+
+        $SubjectList = DB::table('subject')->select('subj_stream')
+        ->distinct()->get();
+
+
+        return view('student.contact')->with([
+            'TeacherList'  =>  $TeacherList, 
+            'SubjectList'  =>  $SubjectList, 
+        ]);
+    }
+
+    public function leaderBoard()
+    {
+        $data = DB::table('results')
+        ->join('student', 'results.stu_ID', '=', 'student.stu_ID')
+        ->orderBy('results.marks', 'desc')
+        ->get();
+
+    
+
+
+        $SubjectList = DB::table('subject')->select('subj_stream')
+        ->distinct()->get();
+
+
+        return view('student.leaderBoard')->with([
+            'data'  =>  $data, 
+            'SubjectList'  =>  $SubjectList, 
+        ]);
+    }
 
     public function login(Request $request)
     {
@@ -184,6 +235,19 @@ class HomeController extends Controller
             'stu_ID' => Auth::guard('student')->user()->stu_ID ,
             'Date_reservation' => $classData->Class_date . '-' . $classData->Class_time,
         ]);
+
+
+        $details = [
+            'title' => 'SIPA LMS',
+            'body' => "Student Name: $classData->subj_name1<br><br>" . // HTML line breaks
+                      "Subject Stream: $classData->subj_stream1<br><br>" . // HTML line breaks
+                      "Student Enrolled: Rs $classData->price"
+        ];
+
+        
+        $email = Auth::guard('student')->user()->parent_email;
+
+        $this->sendEmail($details, $email);
 
 
         $Payment = Payment::create([

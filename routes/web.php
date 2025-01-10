@@ -103,6 +103,11 @@ Route::middleware('admin')->group(function () {
     Route::get('/admin/ApproveAdvertisement/{id}',                  [App\Http\Controllers\admin\AdvertisementController::class, 'ApproveAdvertisement']);
     Route::get('/admin/RejectApproveAdvertisement/{id}',                  [App\Http\Controllers\admin\AdvertisementController::class, 'RejectApproveAdvertisement']);
 
+    //Report Controller
+    Route::get('/admin/reports/teacherReport',                                [App\Http\Controllers\admin\ReportController::class, 'teacherReport'])->name('admin.reports.teacher');
+    Route::get('/admin/reports/studentReport',                                [App\Http\Controllers\admin\ReportController::class, 'studentReport'])->name('admin.reports.student');
+    Route::get('/admin/reports/incomeReport',                                 [App\Http\Controllers\admin\ReportController::class, 'incomeReport'])->name('admin.reports.income');
+
     });
 
 
@@ -138,4 +143,9 @@ Route::middleware('teacher')->group(function () {
     //FeedbackController
     Route::get('/teacher/feedbackManagement/feedbacks',        [App\Http\Controllers\teacher\FeedbackController::class, 'feedbacks']);
     Route::get('/feedbackDelete/{id}',                         [App\Http\Controllers\teacher\FeedbackController::class, 'feedbackDelete']);
+
+    //Report Controller
+    Route::get('/teacher/reports/studentReport',                   [App\Http\Controllers\teacher\ReportController::class, 'studentReport'])->name('teacher.reports.student');
+    Route::get('/teacher/reports/incomeReport',                    [App\Http\Controllers\teacher\ReportController::class, 'incomeReport'])->name('teacher.reports.income');
+
 });

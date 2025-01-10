@@ -55,6 +55,8 @@ Route::middleware('student')->group(function () {
     Route::get('/myClasses',                              [App\Http\Controllers\student\HomeController::class, 'myClasses']);
     Route::post('/addFeedback',                           [App\Http\Controllers\student\HomeController::class, 'addFeedback']);
     Route::get('/selfEvaluation',                         [App\Http\Controllers\student\SelfEvaluationController::class, 'selfEvaluation'])->name('student.selfEvaluation');
+    Route::post('/reschedule',                              [App\Http\Controllers\student\HomeController::class, 'rescheduleRequest'])->name('student.rescheduleRequest');
+
 
     Route::get('/chat/messages',                          [App\Http\Controllers\ChatController::class, 'getMessages']);
     Route::post('/chat/send',                             [App\Http\Controllers\ChatController::class, 'sendMessage']);

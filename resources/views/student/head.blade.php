@@ -254,6 +254,12 @@
                     @else
                     <a href="#" onclick="needLogin()" class="nav-item nav-link">My Classes</a>
                     @endif
+
+                    @if(Auth::guard('student')->check())  
+                     <a href="/rescheduleRequests" class="nav-item nav-link">Reschedule Requests</a>
+                    @else
+                    <a href="#" onclick="needLogin()" class="nav-item nav-link">Reschedule Requests</a>
+                    @endif
                 </div>
 
                 @if(Auth::guard('student')->check())  

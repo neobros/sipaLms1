@@ -336,4 +336,39 @@ class HomeController extends Controller
         return redirect()->back()->with('success', 'Feedback Added Successfully!');
     }
 
+    public function rescheduleRequest(Request $request)
+    {
+        $request->validate([
+            'class_id' => 'required|exists:class_detail,Class_ID',
+            'reschedule_date' => 'required|date',
+            'reschedule_time' => 'required',
+            'note' => 'required|string|max:500',
+        ]);
+
+        try {
+            $classDetail = DB::table('class_detail')
+                ->where('Class_ID', $request->class_id)
+                ->first();
+
+            if (!$classDetail) {
+                return back()->withErrors(['error' => 'Class not found']);
+            }
+
+            DB::table('reschedule_requests')->insert([
+                'class_id' => $request->class_id,
+                'teacher_id' => $classDetail->Teacher_ID, 
+                'reschedule_date' => $request->reschedule_date,
+                'reschedule_time' => $request->reschedule_time,
+                'note' => $request->note,
+                'status' => 'pending', 
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return redirect()->back()->with('success', 'Reschedule request submitted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'An error occurred: ' . $e->getMessage()]);
+        }
+    }
+
 }

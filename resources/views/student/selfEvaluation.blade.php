@@ -223,6 +223,12 @@
                 <p class="text-center">No eligible quizzes available.</p>
             @endforelse
         </div>
+        <!-- Parent Report Button -->
+    <div class="mt-5 text-center">
+        <a href="{{ route('parent.parentReport') }}" class="btn btn-success btn-lg">
+            View Parent Report
+        </a>
+    </div>
     </div>
     
    <!-- Second Chatbot -->

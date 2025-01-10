@@ -37,10 +37,15 @@ Route::post('/login/student',                             [App\Http\Controllers\
 Route::post('/logout/student',                            [App\Http\Controllers\student\HomeController::class, 'logout']);
 Route::post('/register',                                  [App\Http\Controllers\student\HomeController::class, 'register']);
 Route::get('/class/{id}',                                 [App\Http\Controllers\student\HomeController::class, 'class']);
-Route::get('/leaderBoard',                               [App\Http\Controllers\student\HomeController::class, 'leaderBoard']);
+Route::get('/leaderBoard',                                [App\Http\Controllers\student\HomeController::class, 'leaderBoard']);
 Route::get('/studentChat/messages',                       [App\Http\Controllers\ChatController::class, 'studentGetMessages']);
 
-Route::get('/teamView/{Teacher_ID}',                  [App\Http\Controllers\student\HomeController::class, 'teamView']);
+Route::get('/teamView/{Teacher_ID}',                     [App\Http\Controllers\student\HomeController::class, 'teamView']);
+
+//Parent route to view report
+Route::get('/parentReport',                             [App\Http\Controllers\teacher\ReportController::class, 'parentReport'])->name('parent.parentReport');
+Route::get('/parentReportView',                             [App\Http\Controllers\teacher\ReportController::class, 'parentReportView'])->name('parent.parentReportView');
+
 Route::middleware('student')->group(function () {
 
     Route::get('/classView/{Class_ID}',                   [App\Http\Controllers\student\HomeController::class, 'classView']);

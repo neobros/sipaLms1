@@ -140,4 +140,9 @@ Route::middleware('teacher')->group(function () {
     //FeedbackController
     Route::get('/teacher/feedbackManagement/feedbacks',        [App\Http\Controllers\teacher\FeedbackController::class, 'feedbacks']);
     Route::get('/feedbackDelete/{id}',                         [App\Http\Controllers\teacher\FeedbackController::class, 'feedbackDelete']);
+
+    //Report Controller
+    Route::get('/teacher/reports/studentReport',                   [App\Http\Controllers\teacher\ReportController::class, 'studentReport'])->name('teacher.reports.student');
+    Route::get('/teacher/reports/incomeReport',                    [App\Http\Controllers\teacher\ReportController::class, 'incomeReport'])->name('teacher.reports.income');
+
 });

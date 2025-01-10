@@ -268,25 +268,32 @@ class HomeController extends Controller
     
     public function myClasses()
     {
-
         $myClassData = DB::table('class_detail')
-        ->join('subject', 'class_detail.Class_stream', '=', 'subject.subj_ID')
-        ->join('teacher', 'class_detail.Teacher_ID', '=', 'teacher.Teacher_ID')
-        ->join('reservation', 'class_detail.Class_ID', '=', 'reservation.Class_ID')
-        ->select('class_detail.*', 'subject.subj_stream as subj_stream1' , 'subject.subj_name as subj_name1' , 'teacher.Teach_name as Teach_name1')
-        ->where('reservation.stu_ID' ,Auth::guard('student')->user()->stu_ID)->get();
-
+            ->join('subject', 'class_detail.Class_stream', '=', 'subject.subj_ID')
+            ->join('teacher', 'class_detail.Teacher_ID', '=', 'teacher.Teacher_ID')
+            ->join('reservation', 'class_detail.Class_ID', '=', 'reservation.Class_ID')
+            ->leftJoin('reschedule_requests', function ($join) {
+                $join->on('class_detail.Class_ID', '=', 'reschedule_requests.class_id')
+                    ->where('reschedule_requests.student_id', '=', Auth::guard('student')->user()->stu_ID);
+            })
+            ->select(
+                'class_detail.*',
+                'subject.subj_stream as subj_stream1',
+                'subject.subj_name as subj_name1',
+                'teacher.Teach_name as Teach_name1',
+                'reschedule_requests.id as reschedule_request_id' // Check if there's a reschedule request
+            )
+            ->where('reservation.stu_ID', Auth::guard('student')->user()->stu_ID)
+            ->get();
 
         $SubjectList = DB::table('subject')->select('subj_stream')
-        ->distinct()->get();
-
+            ->distinct()->get();
 
         return view('student.myClasses')->with([
-            'myClassData'  =>  $myClassData, 
-            'SubjectList'  =>  $SubjectList, 
+            'myClassData' => $myClassData,
+            'SubjectList' => $SubjectList,
         ]);
     }
-
 
     public function classView($Class_ID)
     {  

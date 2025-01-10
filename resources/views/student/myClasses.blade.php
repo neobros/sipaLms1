@@ -57,16 +57,20 @@
                             <td>{{ $list->Class_type }}</td>
                             <td>---</td>
                             <td>
-                                <!-- Reschedule Button -->
-                                <button class="btn btn-warning btn-sm" 
-                                    data-toggle="modal" 
-                                    data-target="#rescheduleModal" 
-                                    data-classid="{{ $list->Class_ID }}" 
-                                    data-teachername="{{ $list->Teach_name1 }}"
-                                    data-subjectname="{{ $list->subj_name1 }}">
-                                    Request Reschedule
-                                </button>
-                            </td>
+                                @if($list->reschedule_request_id)
+                                    <span class="badge badge-secondary">Already Requested</span>
+                                @else
+                                    <!-- Reschedule Button -->
+                                    <button class="btn btn-warning btn-sm" 
+                                        data-toggle="modal" 
+                                        data-target="#rescheduleModal" 
+                                        data-classid="{{ $list->Class_ID }}" 
+                                        data-teachername="{{ $list->Teach_name1 }}"
+                                        data-subjectname="{{ $list->subj_name1 }}">
+                                        Request Reschedule
+                                    </button>
+                                @endif
+                            </td>                            
                         </tr>
                         @endforeach
                     </tbody>

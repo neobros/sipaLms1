@@ -152,7 +152,6 @@ class ClassController extends Controller
     {
         try {
             $teacherId = Auth::guard('teacher')->user()->Teacher_ID; 
-            // Fetch reschedule requests for the logged-in teacher
             $rescheduleRequests = DB::table('reschedule_requests')
                 ->join('class_detail', 'reschedule_requests.class_id', '=', 'class_detail.Class_ID')
                 ->join('student', 'reschedule_requests.student_id', '=', 'student.stu_ID')
@@ -188,7 +187,7 @@ class ClassController extends Controller
             $teacherReply = $request->status === 'rejected' && empty($request->teacher_reply)
                 ? 'The reschedule request has been rejected due to unsuitable timing.'
                 : $request->teacher_reply;
-                
+
             $rescheduleRequest->update([
                 'status' => $request->status,
                 'teacher_reply' => $teacherReply,

@@ -88,7 +88,6 @@ class ReportController extends Controller
 
     public function parentReport()
     {
-        // dd("test");
         $SubjectList = DB::table('subject')->select('subj_stream')
         ->distinct()->get();
 
@@ -116,7 +115,7 @@ class ReportController extends Controller
             ->whereIn('results.stu_ID', $studentIds)
             ->select('results.*', 'quizzes.title as quiz_title')
             ->get();
-            
+
         $SubjectList = DB::table('subject')->select('subj_stream')
         ->distinct()->get();
 
